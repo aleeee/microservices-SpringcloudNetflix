@@ -1,0 +1,23 @@
+server:
+  port: 8765
+
+eureka:
+  instance:
+    appname: zuul-server
+  client:
+    defaultZone: http://localhost:8761/eureka
+    registerWithEureka: false
+    fetchRegistry: true
+
+zuul:
+  ignoredServices: '*'
+  routes:
+    cryptocurrencies:
+      path: /cryptocurrencies/**
+      serviceId: cryptocurrencies
+    socialmediaservices:
+      path: /social-media-services/**
+      serviceId: social-media-services
+
+
+
