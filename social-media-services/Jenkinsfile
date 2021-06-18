@@ -1,0 +1,25 @@
+pipeline {
+  withMaven(maven:'maven') {
+    
+          stage('Build') {
+              sh 'mvn clean install'
+
+          }
+
+          stage('Image') {
+              dir ('social-media-services') {
+                  def app = docker.build "localhost:5000/social-media-services"
+                  app.push()
+              }
+          }
+
+          stage ('Run') {
+              docker.image("localhost:5000/social-media-services").run('-p 2727:2727 -h social-media-services --name social-media-services')
+          }
+
+          stage ('Final') {
+              build job: 'api-gateway-pipeline', wait: false
+          }      
+
+      }
+}
