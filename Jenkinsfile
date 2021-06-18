@@ -1,5 +1,5 @@
 node {
-    withMaven(maven:'maven') {
+    withMaven() {
 
     stages {
         stage('build') {
