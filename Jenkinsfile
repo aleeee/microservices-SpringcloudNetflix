@@ -1,7 +1,5 @@
 node {
-    withMaven() {
-
-    
+    withMaven() {    
         stage('build') {
             steps {
                 sh 'mvn --version'
