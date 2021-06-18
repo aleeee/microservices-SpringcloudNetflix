@@ -1,0 +1,25 @@
+pipeline {
+  withMaven(maven:'maven') {
+    
+          stage('Build') {
+              sh 'mvn clean install'
+
+          }
+
+          stage('Image') {
+              dir ('api-gateway') {
+                  def app = docker.build "localhost:5000/discovery-service"
+                  app.push()
+              }
+          }
+
+          stage ('Run') {
+              docker.image("localhost:5000/discovery-service").run('-p 8761:8761 -h discovery-service --name discovery-service')
+          }
+
+          stage ('Final') {
+              build job: 'cryptocurrencies-pipeline', wait: false
+          }      
+
+      }
+}
