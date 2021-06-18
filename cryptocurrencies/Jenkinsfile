@@ -7,18 +7,18 @@ pipeline {
           }
 
           stage('Image') {
-              dir ('api-gateway') {
+              dir ('cryptocurrencies') {
                   def app = docker.build "localhost:5000/api-gateway"
                   app.push()
               }
           }
 
           stage ('Run') {
-              docker.image("localhost:5000/api-gateway").run('-p 2121:2121 -h api-gateway --name api-gateway')
+              docker.image("localhost:5000/cryptocurrencies").run('-p 2121:2121 -h cryptocurrencies --name cryptocurrencies')
           }
 
           stage ('Final') {
-              build job: 'cryptocurrencies-pipeline', wait: false
+              build job: 'socialmedia-pipeline', wait: false
           }      
 
       }
