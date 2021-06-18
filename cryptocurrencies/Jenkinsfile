@@ -1,0 +1,25 @@
+pipeline {
+  withMaven(maven:'maven') {
+    
+          stage('Build') {
+              sh 'mvn clean install'
+
+          }
+
+          stage('Image') {
+              dir ('api-gateway') {
+                  def app = docker.build "localhost:5000/api-gateway"
+                  app.push()
+              }
+          }
+
+          stage ('Run') {
+              docker.image("localhost:5000/api-gateway").run('-p 2121:2121 -h api-gateway --name api-gateway')
+          }
+
+          stage ('Final') {
+              build job: 'cryptocurrencies-pipeline', wait: false
+          }      
+
+      }
+}
