@@ -14,12 +14,10 @@ pipeline {
           }
 
           stage ('Run') {
-              docker.image("localhost:5000/api-gateway").run('-p 2121:2121 -h api-gateway --name api-gateway')
+              docker.image("localhost:5000/api-gateway").run('-p 2121:2121 -h api-gateway --name api-gateway --link discovery --link cryptocurrencies --link social-media-services')
           }
 
-          stage ('Final') {
-              build job: 'cryptocurrencies-pipeline', wait: false
-          }      
+         
 
       }
 }
